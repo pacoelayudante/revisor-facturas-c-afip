@@ -17,6 +17,9 @@ function convertirFecha(fecha:string):Date {
 function convertirImporte(importe:string):number {
     return (+importe)/100.0;
 }
+function convertirValorDeCambio(importe:string):number {
+    return (+importe)/1000000.0;
+}
 const conversionDeCampos = {
     "fecha":convertirFecha,
     "importeTotalDeLaOperacion":convertirImporte,
@@ -31,13 +34,16 @@ const conversionDeCampos = {
     "importeDeImpuestosInternos":convertirImporte,
     "transporte":convertirImporte,
     "fechaDeVencimientoDeCAE":convertirFecha,
-    "fechaDeAnulacion":convertirFecha
+    "fechaDeAnulacion":convertirFecha,
+    "tipoDeCambio":convertirValorDeCambio,
 };
 
 export class Factura {
     idFactura : string;
     fecha : Date;
+    totalFacturadoPesos : number;
     totalFacturado : number;
+    valorCambioMoneda : number;
     emisor: string;
     emisorCUIT : number;
     receptor: string;
@@ -68,12 +74,16 @@ export class Factura {
 
             this.idFactura = this.cabeceraDecodificadaIntroduccion["puntoDeVenta"]+this.cabeceraDecodificadaIntroduccion["numeroDeComprobante"];
             this.fecha = this.cabeceraDecodificadaIntroduccion["fecha"];
+
+            this.moneda = this.cabeceraDecodificadaIntroduccion["codigosDeMoneda"];
+            this.valorCambioMoneda = this.cabeceraDecodificadaIntroduccion["tipoDeCambio"];
             this.totalFacturado = this.cabeceraDecodificadaIntroduccion["importeTotalDeLaOperacion"];
+            this.totalFacturadoPesos = this.totalFacturado * this.valorCambioMoneda;
+
             this.receptor = this.cabeceraDecodificadaIntroduccion["denominacionDelComprador"];
             this.receptorCUIT = this.cabeceraDecodificadaIntroduccion["numeroDeIdDelComprador"];
             this.puntoDeVenta = +this.cabeceraDecodificadaIntroduccion["puntoDeVenta"];
             this.numeroDeFactura = +this.cabeceraDecodificadaIntroduccion["numeroDeComprobante"];
-            this.moneda = this.cabeceraDecodificadaIntroduccion["codigosDeMoneda"];
 
             // console.log(campos[i]+"("+longitudCampo+") = "+itemsDeCabecera[0].substr(cabezalLectorData,longitudCampo));
             cabezalLectorData += longitudCampo;

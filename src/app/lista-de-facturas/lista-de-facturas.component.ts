@@ -13,7 +13,6 @@ import { Factura } from '../factura';
 })
 export class ListaDeFacturasComponent implements OnInit {
   facturas = [];
-  caca2 = [,,,];
 
   constructor(
     private infoService: InfoAfipService
