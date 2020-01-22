@@ -6,12 +6,12 @@
         <h5 class="receptor">JUAN CARLOS PEDRO (20332548899)</h5>
         <h4 class="importe">$15000.00</h4>
     </div>
-    <div class="item" *ngFor="let factura of facturasOrdenadas()">
+    <div class="item" *ngFor="let factura of facturasOrdenadas()" [attr.quemes]="factura.fecha.getMonth()">
+        <div class="mes">{{mesDeFactura(factura)}}</div>
         <div class="bordecito" [ngClass]="{'otromes':factura.fecha.getMonth()%2===0}">
-            <div>{{mesDeFactura(factura)}}</div>
         </div>
-        <h6 class="fecha">{{factura.fecha | date}}</h6>
+        <h6 class="fecha">{{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}</h6>
         <h5 class="receptor">{{factura.receptor}} ({{factura.receptorCUIT}})</h5>
-        <h4 class="importe">{{factura.totalFacturado | currency}}<span *ngIf="moneda!=='PES'" class="moneda">{{factura.moneda}}</span></h4>
+        <h4 class="importe">{{factura.totalFacturado | currency}}<span *ngIf="factura.moneda!=='PES'" class="moneda">{{factura.moneda}}</span></h4>
     </div>
 <div>

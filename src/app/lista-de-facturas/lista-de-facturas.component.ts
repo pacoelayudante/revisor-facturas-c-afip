@@ -1,7 +1,7 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { InfoAfipService } from '../info-afip.service';
-import { Factura } from './factura';
+import { Factura } from '../factura';
 
 @NgModule({
   imports:[CommonModule]
@@ -28,7 +28,7 @@ export class ListaDeFacturasComponent implements OnInit {
   }
 
   mesDeFactura(factura:Factura){
-    return "bla";
+    return factura.fecha.toLocaleDateString(undefined,{month:'short'}).toUpperCase().replace('.','');
   }
 
   onCargarChanges(htmlInput:HTMLInputElement) {
