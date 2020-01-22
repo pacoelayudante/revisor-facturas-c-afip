@@ -1,0 +1,36 @@
+{
+    "CABECERA":{
+        "1":{
+            "tipoDeRegistro":1,
+            "fecha":8,
+            "tipoDeComprobante":2,
+            "esControladorFiscal":1,
+            "puntoDeVenta":4,
+            "numeroDeComprobante":8,
+            "numeroDeComprobanteRegistrado":8,
+            "cantidadDeHojas":3,
+            "tipoDeDocumentoDelComprador":2,
+            "numeroDeIdDelComprador":11,
+            "denominacionDelComprador":30,
+            "importeTotalDeLaOperacion":15,
+            "importeTotalDeConceptosQueNoIntegranElPrecioNetoGravado":15,
+            "importeNetoGravado":15,
+            "impuestoLiquidado":15,
+            "percepcionANoCategorizados":15,
+            "importeDeOperacionesExentas":15,
+            "importeDePercepcionesOPagosACuentaDeImpuestosNacionales":15,
+            "importeDePercepcionDeIngresosBrutos":15,
+            "importeDePercepcionesPorImpuestosMunicipales":15,
+            "importeDeImpuestosInternos":15,
+            "transporte":15,
+            "tipoDeResponsable":2,
+            "codigosDeMoneda":3,
+            "tipoDeCambio":10,
+            "cantidadDeAlicuotasDeIVA":1,
+            "codigoDeOperacion":1,
+            "CAE":14,
+            "fechaDeVencimientoDeCAE":8,
+            "fechaDeAnulacion":8
+        }
+    }
+}

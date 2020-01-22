@@ -1,0 +1,23 @@
+.boton::after {
+    /* background-image: url("../../assets/agregar_archivos.png"); */
+    mask-image: url("../../assets/agregar_archivos.png");
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.boton {
+    top: 30px;
+    left: 30px;
+
+    transition: ease-in-out;
+    transition-property: top,left,transform;
+    transition-duration: 1s;
+}
+
+.boton.inicial {
+    top: 50%;
+    left: 50%;
+    transform: scale(2) translate(-50%,-50%);
+}

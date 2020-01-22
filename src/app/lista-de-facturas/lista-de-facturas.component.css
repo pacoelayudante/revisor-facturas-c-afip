@@ -1,0 +1,73 @@
+.lista {
+    --ancho: 48%;
+    position: absolute;
+    width: var(--ancho);
+    left: calc(50% - var(--ancho) / 2);
+    height: 100%;
+
+}
+
+.item {
+    position: relative;
+    margin: 2px;
+    padding: 12px 20px;
+    background-color: var(--col-gris);
+    color: var(--col-destaca);
+}
+
+/* .item::before { */
+.bordecito {
+    --tam-refe: 4px;
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 0;
+    left: calc(-3 * var(--tam-refe) );
+    transform: skewY(-45deg);
+    top: 0;
+    border-left: solid var( --tam-refe) var( --col-destaca);
+    border-right: solid var( --tam-refe) transparent;
+    background-clip: content-box;
+}
+.bordecito.otromes {
+    /* border-left-color: var( --col-brillo); */
+    left: calc(-6 * var(--tam-refe) );
+    top: calc(0.5 * var(--tam-refe));
+}
+
+.item::before{
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: linear .1s background-color;
+    background-color: rgba(255,255,255,0);
+}
+.item:hover::before {
+    background-color: rgba(255,255,255,0.1);
+}
+
+h3 {
+    text-align: center;
+    padding: 10px;
+    color: var(--col-brillo);
+}
+
+.moneda {
+    color: var(--col-fondo);
+}
+
+.receptor {
+    
+}
+
+.fecha {
+    float: right;
+}
+
+.importe {
+    color: var(--col-brillo);
+}

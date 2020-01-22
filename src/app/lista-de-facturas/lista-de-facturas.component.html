@@ -1,0 +1,17 @@
+<div class="lista">
+    <h3>Facturas Cargadas</h3>
+    <div class="item" *ngFor="let caca of caca2">
+        <div class="bordecito"></div>
+        <h6 class="fecha">12 jul 2019</h6>
+        <h5 class="receptor">JUAN CARLOS PEDRO (20332548899)</h5>
+        <h4 class="importe">$15000.00</h4>
+    </div>
+    <div class="item" *ngFor="let factura of facturasOrdenadas()">
+        <div class="bordecito" [ngClass]="{'otromes':factura.fecha.getMonth()%2===0}">
+            <div>{{mesDeFactura(factura)}}</div>
+        </div>
+        <h6 class="fecha">{{factura.fecha | date}}</h6>
+        <h5 class="receptor">{{factura.receptor}} ({{factura.receptorCUIT}})</h5>
+        <h4 class="importe">{{factura.totalFacturado | currency}}<span *ngIf="moneda!=='PES'" class="moneda">{{factura.moneda}}</span></h4>
+    </div>
+<div>
