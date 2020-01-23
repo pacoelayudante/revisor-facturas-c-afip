@@ -11,7 +11,7 @@ const regexEsCabecera = /CABECERA/g;
 })
 export class InfoAfipService {
   facturasPorId = { "length": 0 };
-  facturasArray = [,];
+  facturasArray = [];
   tiposDeComprobantes: any = (tiposDeComprobantes as any).default;
 
   constructor() { }

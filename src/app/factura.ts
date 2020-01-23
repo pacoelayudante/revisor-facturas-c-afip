@@ -92,6 +92,6 @@ export class Factura {
 
     actualizarDetalle(detalle:string) {
         
-      console.log("detalle - \n"+detalle);
+    //   console.log("detalle - \n"+detalle);
     }
 }

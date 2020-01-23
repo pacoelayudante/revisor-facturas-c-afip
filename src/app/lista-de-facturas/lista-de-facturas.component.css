@@ -34,6 +34,13 @@
     left: calc(-6 * var(--separacion-bordecito) );
     top: calc(0.5 * var(--separacion-bordecito));
 }
+.bordecito.sinfactura {
+    border-left-color: var(--col-gris);
+}
+div.sinfactura {
+    padding: 1px 0px;
+    margin: 4px 2px;
+}
 
 .mes {
     direction: rtl;

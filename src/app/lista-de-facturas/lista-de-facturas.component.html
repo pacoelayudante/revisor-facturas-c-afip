@@ -1,11 +1,19 @@
 <div class="lista">
-    <h3>Facturas Cargadas</h3>
-    <div class="item" *ngFor="let factura of facturasOrdenadas()" [attr.quemes]="factura.fecha.getMonth()">
-        <div class="mes">{{mesDeFactura(factura)}}</div>
-        <div class="bordecito" [ngClass]="{'otromes':factura.fecha.getMonth()%2===0}">
+    <h3 *ngIf="facturas.length>0" >Facturas Cargadas</h3>
+    <div class="item" *ngFor="let factura of facturasOrdenadas()" [attr.quemes]="factura.fecha.getMonth()" [ngClass]="{'sinfactura':factura.numeroDeFactura === undefined}">
+        <div *ngIf="factura.numeroDeFactura !== undefined" class="mes">{{mesDeFactura(factura)}}</div>
+        <div *ngIf="factura.numeroDeFactura !== undefined" class="bordecito" [ngClass]="{'otromes':factura.fecha.getMonth()%2===0, 'sinfactura':factura.numeroDeFactura===undefined}">
         </div>
-        <h6 class="fecha">{{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}</h6>
-        <h5 class="receptor">{{factura.receptor}} ({{factura.receptorCUIT}})</h5>
-        <h4 class="importe">{{factura.totalFacturadoPesos | currency}}<span *ngIf="factura.moneda!=='PES'" class="moneda">{{factura.moneda}} {{factura.totalFacturado | currency}}</span></h4>
+        <div *ngIf="factura.numeroDeFactura !== undefined">
+            <h6 class="fecha">
+                {{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}</h6>
+            <h5 class="receptor">{{factura.receptor}} ({{factura.receptorCUIT}})</h5>
+            <h4 class="importe">{{factura.totalFacturadoPesos | currency}}<span *ngIf="factura.moneda!=='PES'"
+                    class="moneda">{{factura.moneda}} {{factura.totalFacturado | currency}}</span></h4>
+        </div>
+        <div *ngIf="factura.numeroDeFactura === undefined">
+            <!-- <h6 class="fecha">
+                {{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}</h6> -->
+        </div>
     </div>
-<div>
+    <div>
