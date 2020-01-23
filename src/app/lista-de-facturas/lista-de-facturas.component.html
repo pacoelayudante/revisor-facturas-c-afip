@@ -1,5 +1,5 @@
 <div class="lista">
-    <h3 *ngIf="facturas.length>0" >Facturas Cargadas</h3>
+    <!-- <h3 *ngIf="facturas.length>0" >Facturas Cargadas</h3>
     <div class="item" *ngFor="let factura of facturasOrdenadas()" [attr.quemes]="factura.fecha.getMonth()" [ngClass]="{'sinfactura':factura.numeroDeFactura === undefined}">
         <div *ngIf="factura.numeroDeFactura !== undefined" class="mes">{{mesDeFactura(factura)}}</div>
         <div *ngIf="factura.numeroDeFactura !== undefined" class="bordecito" [ngClass]="{'otromes':factura.fecha.getMonth()%2===0, 'sinfactura':factura.numeroDeFactura===undefined}">
@@ -12,8 +12,29 @@
                     class="moneda">{{factura.moneda}} {{factura.totalFacturado | currency}}</span></h4>
         </div>
         <div *ngIf="factura.numeroDeFactura === undefined">
-            <!-- <h6 class="fecha">
-                {{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}</h6> -->
+        </div>
+    </div> -->
+    <div *ngFor="let porAno of facturasAgrupadas || []; let i = index">
+        <div class="ano">{{anoActual-i}}</div>
+        <div *ngFor="let porMes of porAno || []; let j = index">
+            <div *ngIf="porMes.length>0">
+
+                <div *ngFor="let factura of porMes || []; let z = index">
+                    <div class="item">
+                        <div class="bordecito"
+                            [ngClass]="{'otromes':factura.fecha.getMonth()%2===0, 'sinfactura':factura.numeroDeFactura===undefined}">
+                        </div>
+                        <h6 class="fecha">
+                            {{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}
+                        </h6>
+                        <h5 class="receptor">{{factura.receptor}}<span class="cuit"> ({{factura.receptorCUIT}})</span>
+                        </h5>
+                        <h4 class="importe">
+                            {{factura.totalFacturadoPesos | currency}}<span *ngIf="factura.moneda!=='PES'" class="moneda">{{factura.moneda}} {{factura.totalFacturado | currency}}</span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div>
+<div>

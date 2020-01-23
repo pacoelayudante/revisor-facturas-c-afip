@@ -96,6 +96,15 @@ h3 {
     padding: 0px 10px;
     font-size: 18px;
 }
+.cuit {
+    color: var(--col-fondo);
+}
+
+.ano {
+    float: right;
+    right: -40px;
+    position: absolute;
+}
 
 .receptor {
     
