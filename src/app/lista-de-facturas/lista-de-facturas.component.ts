@@ -15,6 +15,7 @@ export class ListaDeFacturasComponent implements OnInit {
   anoActual: number;
   facturasAgrupadas: Factura[][][];
   cuitMarcado: string;
+  mesHover: Factura[];
 
   constructor(
     private infoService: InfoAfipService
@@ -26,8 +27,14 @@ export class ListaDeFacturasComponent implements OnInit {
   }
 
   onReceptorClick(cuitTocado: string) {
-    if(this.cuitMarcado === cuitTocado) this.cuitMarcado = '';
+    if (this.cuitMarcado === cuitTocado) this.cuitMarcado = '';
     else this.cuitMarcado = cuitTocado;
+  }
+  onPointerEnterMes(queMes: Factura[]) {
+    this.mesHover = queMes;
+  }
+  onPointerLeaveMes(queMes: Factura[]) {
+    if(this.mesHover===queMes)this.mesHover = null;
   }
 
   mesDeFactura(factura: Factura) {
@@ -37,6 +44,28 @@ export class ListaDeFacturasComponent implements OnInit {
   mesesFiltrados(queAno: number) {
     return this.facturasAgrupadas[queAno] ?
       this.facturasAgrupadas[queAno].filter(e => e && e.length > 0) : [];
+  }
+  mesesFiltradosPorArray(queAno: Factura[][]) {
+    return queAno.filter(e => e && e.length > 0);
+  }
+
+  totalImporteAnual(queAno: Factura[][]) {
+    let total = 0;
+    queAno.forEach(cadaMes => {
+      if (cadaMes) total += this.totalImporteMensual(cadaMes);
+    });
+    return total;
+  }
+  totalImporteMensual(queMes: Factura[]) {
+    let total = 0;
+    queMes.forEach(mes => {
+      if (mes && mes.totalFacturadoPesos) total += mes.totalFacturadoPesos;
+    })
+    return total;
+  }
+
+  impactoMensual(queAno:Factura[][], mesIndex:number) {
+    return this.totalImporteMensual(queAno[mesIndex])/this.totalImporteAnual(queAno);
   }
 
 }

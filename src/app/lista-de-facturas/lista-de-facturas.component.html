@@ -1,28 +1,48 @@
 <div class="lista" [ngClass]="{'cuitMarcado':cuitMarcado}">
     <ng-container *ngFor="let esteAno of facturasAgrupadas || []; let ano = index;">
-        <ng-container *ngIf="mesesFiltrados(ano).length>0">
-            <div class="mes-container" *ngFor="let esteMes of mesesFiltrados(ano) || []; let mesIndex = index">
-                <ng-container *ngIf="esteMes.length>0">
-                    <div class="rotulo-mes">{{mesDeFactura(esteMes[0])}}</div>
-                    <div *ngIf="mesIndex==0" class="rotulo-ano">{{anoActual-ano}}</div>
-                    <div *ngFor="let factura of esteMes || []; let facturaIndex = index">
-                        <div class="factura-container" [ngClass]="{'marcado':factura.receptorCUIT==cuitMarcado}">
-                            <div class="bordecito">
+        <ng-container *ngIf="esteAno && mesesFiltradosPorArray(esteAno).length>0">
+            <span></span>
+            <div class="ano-container">
+                <div class="rotulo-ano rotulo-sticky">{{anoActual-ano}}
+                    <div class="total-anual">{{totalImporteAnual(esteAno) | currency}}</div>
+                    <div class="impacto-mensual">
+                        <ng-container
+                            *ngFor="let esteMes of esteAno || []; let mesIndex = index">
+                            <div *ngIf="esteMes.length>0" [ngClass]="{'mes-hover':esteMes===mesHover}" [ngStyle]="{'width':100*impactoMensual(esteAno,mesIndex)+'%'}"></div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="meses-container">
+                    <div (mouseenter)="onPointerEnterMes(esteMes)" (mouseleave)="onPointerLeaveMes(esteMes)" class="mes-container"
+                        *ngFor="let esteMes of mesesFiltradosPorArray(esteAno) || []; let mesIndex = index">
+                        <div class="rotulo-mes rotulo-sticky">{{mesDeFactura(esteMes[0])}}
+                            <div class="total-mensual">{{totalImporteMensual(esteMes) | currency}}</div>
+                        </div>
+                        <div class="facturas-container">
+                            <div class="factura-container" [ngClass]="{'marcado':factura.receptorCUIT==cuitMarcado}"
+                                *ngFor="let factura of esteMes || []; let facturaIndex = index">
+
+                                <div class="bordecito">
+                                </div>
+                                <h6 class="fecha">
+                                    {{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}
+                                </h6>
+                                <h5 [attr.cuit]="factura.receptorCUIT" class="receptor pointer"
+                                    (click)="onReceptorClick(factura.receptorCUIT)">{{factura.receptor}}<span
+                                        class="cuit">
+                                        ({{factura.receptorCUIT}})</span>
+                                </h5>
+                                <h4 class="importe">
+                                    {{factura.totalFacturadoPesos | currency}}<span *ngIf="factura.moneda!=='PES'"
+                                        class="moneda">{{factura.moneda}} {{factura.totalFacturado | currency}}</span>
+                                </h4>
+
                             </div>
-                            <h6 class="fecha">
-                                {{factura.fecha.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}}
-                            </h6>
-                            <h5 [attr.cuit]="factura.receptorCUIT" class="receptor pointer" (click)="onReceptorClick(factura.receptorCUIT)">{{factura.receptor}}<span class="cuit">
-                                    ({{factura.receptorCUIT}})</span>
-                            </h5>
-                            <h4 class="importe">
-                                {{factura.totalFacturadoPesos | currency}}<span *ngIf="factura.moneda!=='PES'"
-                                    class="moneda">{{factura.moneda}} {{factura.totalFacturado | currency}}</span>
-                            </h4>
                         </div>
                     </div>
-                </ng-container>
+                </div>
             </div>
+            <span *ngIf="mesesFiltradosPorArray(esteAno).length%2==0"></span>
         </ng-container>
     </ng-container>
 </div>

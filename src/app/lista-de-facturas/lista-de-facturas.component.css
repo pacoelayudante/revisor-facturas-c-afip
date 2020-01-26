@@ -1,18 +1,60 @@
 .lista {
-    --separacion-bordecito: 4px;
-    --ancho: 48%;
+    --separacion-bordecito: 0.25rem;
+    --ancho: 60%;
     position: absolute;
     width: var(--ancho);
     left: calc(50% - var(--ancho) / 2);
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 580px;
 }
 .lista *,
 .lista *::after,
 .lista *::before {
     transition: linear .15s;
-    transition-property: background-color,color;
+    transition-property: background-color,border-color,color;
 }
 
+.ano-container {
+    flex-direction: row-reverse;
+    display: flex;
+}
+
+.rotulo-ano, .rotulo-mes{
+    width: 0rem;
+    padding: 5px;
+    font-size: 1.8rem;
+    text-align: right;
+    font-family: fantasy;
+    color: var(--col-gris);
+}
+.rotulo-mes{
+    width: 3.5rem;
+    margin-right: calc(9 * var(--separacion-bordecito));
+    direction: rtl;
+}
+.rotulo-sticky {
+    align-self: self-start;
+    position: sticky;
+    top: 0px;
+}
+
+.meses-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.mes-container{
+    flex-direction: row;
+    display: flex;
+    flex-grow: 1;
+}
+
+.facturas-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
 .factura-container {
     position: relative;
     margin: 2px;
@@ -34,29 +76,16 @@
     border-right: solid var( --separacion-bordecito) transparent;
     background-clip: content-box;
 }
-
- .mes-container:nth-child(odd) .bordecito {
-    /* border-left-color: var( --col-brillo); */
+.mes-container:hover .bordecito {
+    border-left-color: var( --col-brillo);
+}
+.lista>span:nth-of-type(odd)+.ano-container .mes-container:nth-child(odd) .bordecito {
     left: calc(-6 * var(--separacion-bordecito) );
     top: calc(0.5 * var(--separacion-bordecito));
 }
-
-.rotulo-mes,
-.rotulo-ano {
-    direction: rtl;
-    overflow: visible;
-    position: absolute;
-    left: calc( -24 * var(--separacion-bordecito) );
-    font-size: 33px;
-    text-align: right;
-    font-family: fantasy;
-    color: var(--col-gris);
-}
-.rotulo-ano {
-    position: absolute;
-    float: right;
-    left: 0px;
-    right: -80px;
+.lista>span:nth-of-type(even)+.ano-container .mes-container:nth-child(even) .bordecito {
+    left: calc(-6 * var(--separacion-bordecito) );
+    top: calc(0.5 * var(--separacion-bordecito));
 }
 
 .factura-container::before{
@@ -83,9 +112,11 @@ h3 {
 .moneda {
     color: var(--col-fondo);
     padding: 0px 10px;
-    font-size: 18px;
+    font-size: 1rem;
 }
 .cuit {
+    word-wrap: none;
+    overflow: hidden;
     color: var(--col-fondo);
 }
 
@@ -96,14 +127,45 @@ h3 {
 .importe {
     color: var(--col-brillo);
 }
+.total-anual {
+    font-size: 1rem;
+    color: var(--col-brillo);
+}
+.total-mensual {
+    font-size: 1rem;
+}
+.mes-container:hover .total-mensual {
+    color: var(--col-brillo);
+}
+
 .cuitMarcado .factura-container:not(.marcado) * {
     color: var(--col-fondo);
     border-left-color: var(--col-gris);
 } 
 
+.receptor {
+    white-space: nowrap;
+    overflow: hidden;
+    margin-block-end: 8px;
+}
 .marcado .receptor {
     color: var(--col-brillo);
 }
 .marcado .cuit{
     color: var(--col-destaca);
+}
+
+.impacto-mensual {
+    pointer-events: all;
+    width: 8rem;
+}
+.impacto-mensual>div {
+    height: 3px;
+    margin: 1px;
+}
+.ano-container:hover .impacto-mensual>div:not(.mes-hover) {
+    background-color: var(--col-destaca);
+}
+.impacto-mensual>div.mes-hover {
+    background-color: var(--col-brillo);
 }
