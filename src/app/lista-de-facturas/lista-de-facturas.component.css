@@ -5,18 +5,23 @@
     width: var(--ancho);
     left: calc(50% - var(--ancho) / 2);
     height: 100%;
-
+}
+.lista *,
+.lista *::after,
+.lista *::before {
+    transition: linear .15s;
+    transition-property: background-color,color;
 }
 
-.item {
+.factura-container {
     position: relative;
     margin: 2px;
     padding: 12px 20px;
     background-color: var(--col-gris);
     color: var(--col-destaca);
+    width:auto;
 }
 
-/* .item::before { */
 .bordecito {
     content: '';
     height: 100%;
@@ -29,20 +34,15 @@
     border-right: solid var( --separacion-bordecito) transparent;
     background-clip: content-box;
 }
-.bordecito.otromes {
+
+ .mes-container:nth-child(odd) .bordecito {
     /* border-left-color: var( --col-brillo); */
     left: calc(-6 * var(--separacion-bordecito) );
     top: calc(0.5 * var(--separacion-bordecito));
 }
-.bordecito.sinfactura {
-    border-left-color: var(--col-gris);
-}
-div.sinfactura {
-    padding: 1px 0px;
-    margin: 4px 2px;
-}
 
-.mes {
+.rotulo-mes,
+.rotulo-ano {
     direction: rtl;
     overflow: visible;
     position: absolute;
@@ -52,24 +52,14 @@ div.sinfactura {
     font-family: fantasy;
     color: var(--col-gris);
 }
-
-.item[quemes="0"]+.item[quemes="0"] .mes,
-.item[quemes="1"]+.item[quemes="1"] .mes,
-.item[quemes="2"]+.item[quemes="2"] .mes,
-.item[quemes="3"]+.item[quemes="3"] .mes,
-.item[quemes="4"]+.item[quemes="4"] .mes,
-.item[quemes="5"]+.item[quemes="5"] .mes,
-.item[quemes="6"]+.item[quemes="6"] .mes,
-.item[quemes="7"]+.item[quemes="7"] .mes,
-.item[quemes="8"]+.item[quemes="8"] .mes,
-.item[quemes="9"]+.item[quemes="9"] .mes,
-.item[quemes="10"]+.item[quemes="10"] .mes,
-.item[quemes="11"]+.item[quemes="11"] .mes
-{
-    display: none;
+.rotulo-ano {
+    position: absolute;
+    float: right;
+    left: 0px;
+    right: -80px;
 }
 
-.item::before{
+.factura-container::before{
     pointer-events: none;
     content: '';
     width: 100%;
@@ -78,10 +68,9 @@ div.sinfactura {
     position: absolute;
     top: 0;
     left: 0;
-    transition: linear .1s background-color;
     background-color: rgba(255,255,255,0);
 }
-.item:hover::before {
+.factura-container:hover::before {
     background-color: rgba(255,255,255,0.1);
 }
 
@@ -100,20 +89,21 @@ h3 {
     color: var(--col-fondo);
 }
 
-.ano {
-    float: right;
-    right: -40px;
-    position: absolute;
-}
-
-.receptor {
-    
-}
-
 .fecha {
     float: right;
 }
 
 .importe {
     color: var(--col-brillo);
+}
+.cuitMarcado .factura-container:not(.marcado) * {
+    color: var(--col-fondo);
+    border-left-color: var(--col-gris);
+} 
+
+.marcado .receptor {
+    color: var(--col-brillo);
+}
+.marcado .cuit{
+    color: var(--col-destaca);
 }

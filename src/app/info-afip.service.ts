@@ -20,6 +20,7 @@ export class InfoAfipService {
     this.anoActual = new Date().getFullYear();
   }
 
+  //esto tendria que convertirse en algo que tome una lista de buffer
   onLoadArchivo(ev: ProgressEvent, archivo: File) {
     if (ev.loaded) {
       let contenido = <string>(ev.target as FileReader).result;
@@ -49,6 +50,7 @@ export class InfoAfipService {
         let mesInvertido = 11 - factura.fecha.getMonth();
         if (! this.facturasAgrupadas[anoInvertido]) {// iniciar array de año, con meses vacios y todo
           this.facturasAgrupadas[anoInvertido] = [];
+          this.facturasAgrupadas[anoInvertido]["cantMesesPreviosConData"] = 0;
           for(let m=0; m<12; m++) this.facturasAgrupadas[anoInvertido][m] = [];
         }
         if(! this.facturasAgrupadas[anoInvertido][mesInvertido].includes(factura)) {
@@ -56,6 +58,10 @@ export class InfoAfipService {
           this.facturasAgrupadas[anoInvertido][mesInvertido].sort((a,b)=>a.fecha.getTime()-b.fecha.getTime());
         }
       }
+
+      // for(let i=1; i<this.facturasAgrupadas.length; i++) {//el primero seguro es cero
+      //   this.facturasAgrupadas[i]["cantMesesPreviosConData"] = this.facturasAgrupadas[i-1].filter(e=>e.length).length;
+      // }
     }
   }
 
@@ -64,6 +70,7 @@ export class InfoAfipService {
 
     let lector = new FileReader();
     let that = this;
+    // aca se puede hacer un buffer de archivos para leer
     lector.onloadend = (function (archivo) {
       return function (ev: ProgressEvent) {
         that.onLoadArchivo(ev, archivo);

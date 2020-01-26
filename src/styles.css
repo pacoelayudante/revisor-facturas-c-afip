@@ -25,6 +25,9 @@ h6, h5, h4, h3 {
     margin-inline-end: 0;
 }
 
+.pointer {
+    cursor: pointer;
+}
 .boton {
     top: 0;
     width: 10vmin;
