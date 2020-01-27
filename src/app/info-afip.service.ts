@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as tiposDeComprobantes from './tipos-de-comprobantes.json'
 import { Factura } from './factura';
 
-const regexExtraerIdArchivo = /\d{11}_\d{2}_\d{4}_\d{8}/g;
+const regexExtraerIdArchivo = /\d{1,11}_\d{1,2}_\d{1,4}_\d{1,8}/g;
 const regexEsDetalle = /DETALLE/g;
 const regexEsCabecera = /CABECERA/g;
 
