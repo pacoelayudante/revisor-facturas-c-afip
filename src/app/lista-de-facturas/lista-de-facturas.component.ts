@@ -11,15 +11,12 @@ import { Factura } from '../factura';
   templateUrl: './lista-de-facturas.component.html',
   styleUrls: ['./lista-de-facturas.component.css']
 })
+
 export class ListaDeFacturasComponent implements OnInit {
   anoActual: number;
   facturasAgrupadas: Factura[][][];
-  cuitMarcado: number;
   mesHover: Factura[];
-  cuitMarcadoNombre: string;
-  cuitMarcadoImporteMensual: number[];
-  cuitMarcadoImporteTotal: number;
-  cuitMarcadoMaximoMensual: number;
+  cuitMarcado: CuitMarcado = new CuitMarcado();
 
   constructor(
     private infoService: InfoAfipService
@@ -32,30 +29,17 @@ export class ListaDeFacturasComponent implements OnInit {
 
   onReceptorClick(cuitTocado: number, evento: Event) {
     if (evento) evento.stopPropagation();
-    if (this.cuitMarcado === cuitTocado) this.cuitMarcado = 0;
-    else {
-      this.cuitMarcado = cuitTocado;
-      if (this.cuitMarcado) {
-        this.cuitMarcadoImporteTotal = 0;
-        this.cuitMarcadoMaximoMensual = 0;
-        this.cuitMarcadoImporteMensual = [];
-        this.facturasAgrupadas.forEach(ano => {
-          ano.forEach(mes => {
-            mes.forEach(factura => {
-              if (factura.receptorCUIT === this.cuitMarcado) {
-                this.cuitMarcadoNombre = factura.receptor;
-                this.cuitMarcadoImporteMensual.push(factura.totalFacturadoPesos);
-                this.cuitMarcadoImporteTotal += factura.totalFacturadoPesos;
-                this.cuitMarcadoMaximoMensual = Math.max(this.cuitMarcadoMaximoMensual,factura.totalFacturadoPesos);
-              }
-            });
-          });
-        });
-      }
+    if (this.cuitMarcado.visible && this.cuitMarcado.cuit === cuitTocado) this.cuitMarcado.visible = false;
+    else if (! cuitTocado){
+      this.cuitMarcado.visible = false;
+    }
+    else{
+      this.cuitMarcado = new CuitMarcado(cuitTocado,this.facturasAgrupadas);
     }
   }
   onPointerEnterMes(queMes: Factura[]) {
     this.mesHover = queMes;
+    if(this.cuitMarcado.mesesFacturados.includes( this.mesHover))console.log("si´ps");
   }
   onPointerLeaveMes(queMes: Factura[]) {
     if (this.mesHover === queMes) this.mesHover = null;
@@ -92,4 +76,40 @@ export class ListaDeFacturasComponent implements OnInit {
     return this.totalImporteMensual(queAno[mesIndex]) / this.totalImporteAnual(queAno);
   }
 
+}
+
+class CuitMarcado {
+  cuit: number;
+  nombre: string;
+  importeTotal:number;
+  importesMensuales: number[];
+  mesesFacturados: Factura[][] = [];
+  importeMensualMaximo: number;
+  visible: boolean = false;
+
+  constructor(cuitTocado?: number, facturasAgrupadas?: Factura[][][]) {
+    if(!cuitTocado || !facturasAgrupadas) return;
+    this.visible = true;
+    this.cuit = cuitTocado;
+    this.importeTotal = 0;
+    this.importeMensualMaximo = 0;
+    this.importesMensuales = [];
+    facturasAgrupadas.forEach(ano => {
+      ano.forEach(mes => {
+        let totalMensual = 0;
+        mes.forEach(factura => {
+          if (factura.receptorCUIT === this.cuit) {
+            if (!this.nombre) this.nombre = factura.receptor;
+            totalMensual += factura.totalFacturadoPesos;
+            this.importeTotal += factura.totalFacturadoPesos;
+          }
+        });
+        if(totalMensual){
+          this.importeMensualMaximo = Math.max(this.importeMensualMaximo, totalMensual);
+          this.importesMensuales.push(totalMensual);
+          this.mesesFacturados.push(mes);
+        }
+      });
+    });
+  }
 }

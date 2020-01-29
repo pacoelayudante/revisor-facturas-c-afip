@@ -145,7 +145,10 @@ h3 {
 .total-mensual {
     font-size: 1rem;
 }
-.mes-container:hover .total-mensual {
+/* .mes-container:hover .total-mensual {
+    color: var(--col-brillo);
+} */
+.mes-container.mes-hover .total-mensual {
     color: var(--col-brillo);
 }
 
@@ -173,10 +176,12 @@ h3 {
 .impacto-mensual>div {
     height: 3px;
     margin: 1px;
-}
-.ano-container:hover .impacto-mensual>div:not(.mes-hover) {
+    background-color: transparent;
     background-color: var(--col-destaca);
 }
+/* .ano-container:hover .impacto-mensual>div:not(.mes-hover) {
+    background-color: var(--col-destaca);
+} */
 .impacto-mensual>div.mes-hover {
     background-color: var(--col-brillo);
 }
@@ -216,7 +221,7 @@ h3 {
     font-size: 1.6rem;
 }
 .datos-receptor>div {
-    flex-grow: 1;
+    flex-basis: 100%;
 }
 .contenedor-datos-receptor .impacto-mensual {
     pointer-events: all;
@@ -230,8 +235,7 @@ h3 {
     flex-grow: 1;
     max-width: 1rem;
     margin: 1px;
-    background-color: var(--col-destaca);
 }
-/* .impacto-mensual>div.mes-hover {
-    background-color: var(--col-brillo);
+/* .contenedor-datos-receptor .impacto-mensual>div:not(.mes-hover) {
+    background-color: var(--col-destaca);
 } */
