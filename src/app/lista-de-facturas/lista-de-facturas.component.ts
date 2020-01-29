@@ -14,8 +14,12 @@ import { Factura } from '../factura';
 export class ListaDeFacturasComponent implements OnInit {
   anoActual: number;
   facturasAgrupadas: Factura[][][];
-  cuitMarcado: string;
+  cuitMarcado: number;
   mesHover: Factura[];
+  cuitMarcadoNombre: string;
+  cuitMarcadoImporteMensual: number[];
+  cuitMarcadoImporteTotal: number;
+  cuitMarcadoMaximoMensual: number;
 
   constructor(
     private infoService: InfoAfipService
@@ -26,15 +30,35 @@ export class ListaDeFacturasComponent implements OnInit {
     this.anoActual = this.infoService.anoActual;
   }
 
-  onReceptorClick(cuitTocado: string) {
-    if (this.cuitMarcado === cuitTocado) this.cuitMarcado = '';
-    else this.cuitMarcado = cuitTocado;
+  onReceptorClick(cuitTocado: number, evento: Event) {
+    if (evento) evento.stopPropagation();
+    if (this.cuitMarcado === cuitTocado) this.cuitMarcado = 0;
+    else {
+      this.cuitMarcado = cuitTocado;
+      if (this.cuitMarcado) {
+        this.cuitMarcadoImporteTotal = 0;
+        this.cuitMarcadoMaximoMensual = 0;
+        this.cuitMarcadoImporteMensual = [];
+        this.facturasAgrupadas.forEach(ano => {
+          ano.forEach(mes => {
+            mes.forEach(factura => {
+              if (factura.receptorCUIT === this.cuitMarcado) {
+                this.cuitMarcadoNombre = factura.receptor;
+                this.cuitMarcadoImporteMensual.push(factura.totalFacturadoPesos);
+                this.cuitMarcadoImporteTotal += factura.totalFacturadoPesos;
+                this.cuitMarcadoMaximoMensual = Math.max(this.cuitMarcadoMaximoMensual,factura.totalFacturadoPesos);
+              }
+            });
+          });
+        });
+      }
+    }
   }
   onPointerEnterMes(queMes: Factura[]) {
     this.mesHover = queMes;
   }
   onPointerLeaveMes(queMes: Factura[]) {
-    if(this.mesHover===queMes)this.mesHover = null;
+    if (this.mesHover === queMes) this.mesHover = null;
   }
 
   mesDeFactura(factura: Factura) {
@@ -64,8 +88,8 @@ export class ListaDeFacturasComponent implements OnInit {
     return total;
   }
 
-  impactoMensual(queAno:Factura[][], mesIndex:number) {
-    return this.totalImporteMensual(queAno[mesIndex])/this.totalImporteAnual(queAno);
+  impactoMensual(queAno: Factura[][], mesIndex: number) {
+    return this.totalImporteMensual(queAno[mesIndex]) / this.totalImporteAnual(queAno);
   }
 
 }
