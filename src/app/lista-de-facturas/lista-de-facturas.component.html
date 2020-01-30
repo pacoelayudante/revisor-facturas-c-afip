@@ -14,13 +14,19 @@
                 </h4>
             </div>
             <div class="impacto-mensual">
-                <div *ngFor="let cadaMes of cuitMarcado.importesMensuales; let mesIndex = index"
-                    [ngStyle]="{'height':100*(cadaMes/cuitMarcado.importeMensualMaximo)+'%'}"
-                    [ngClass]="{'mes-hover':cuitMarcado.mesesFacturados[mesIndex]===mesHover}"
-                    (mouseenter)="onPointerEnterMes(cuitMarcado.mesesFacturados[mesIndex])"
-                    (mouseleave)="onPointerLeaveMes(cuitMarcado.mesesFacturados[mesIndex])">
-
-                </div>
+                <ng-container *ngFor="let cadaAno of cuitMarcado.importes; let anoIndex = index">
+                    <ng-container *ngIf="anoIndex<=cuitMarcado.ultimoAno">
+                        <ng-container *ngFor="let cadaMes of cadaAno; let mesIndex = index">
+                            <div *ngIf="mesIndex<=cuitMarcado.ultimoMes"
+                                [ngClass]="{'mes-hover':facturasAgrupadas[anoIndex][mesIndex]===mesHover,'oculto':cadaMes===0}"
+                                (mouseenter)="onPointerEnterMes(facturasAgrupadas[anoIndex][mesIndex],facturasAgrupadas[anoIndex])"
+                                (mouseleave)="onPointerLeaveMes(facturasAgrupadas[anoIndex][mesIndex],facturasAgrupadas[anoIndex])" >
+                                <div [ngStyle]="{'flex-basis':100*(cadaMes/cuitMarcado.importeMensualMaximo)+'%'}">
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
             </div>
         </div>
     </div>
@@ -30,14 +36,14 @@
         <ng-container *ngFor="let esteAno of facturasAgrupadas || []; let ano = index;">
             <ng-container *ngIf="esteAno && mesesFiltradosPorArray(esteAno).length>0">
                 <span></span>
-                <div class="ano-container">
+                <div class="ano-container" [ngClass]="{'ano-hover':esteAno===anoHover}">
                     <div class="rotulo-ano rotulo-sticky">{{anoActual-ano}}
                         <div class="total-anual">{{totalImporteAnual(esteAno) | currency}}</div>
                         <div class="impacto-mensual">
                             <ng-container *ngFor="let esteMes of esteAno || []; let mesIndex = index">
                                 <div *ngIf="esteMes.length>0" [ngClass]="{'mes-hover':esteMes===mesHover}"
-                                    [ngStyle]="{'width':100*impactoMensual(esteAno,mesIndex)+'%'}"
                                     (mouseenter)="onPointerEnterMes(esteMes)" (mouseleave)="onPointerLeaveMes(esteMes)">
+                                    <div [ngStyle]="{'flex-basis':100*impactoMensual(esteAno,mesIndex)+'%'}"></div>
                                 </div>
                             </ng-container>
                         </div>

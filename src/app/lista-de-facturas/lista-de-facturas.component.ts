@@ -2,6 +2,8 @@ import { Component, OnInit, NgModule } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { InfoAfipService } from '../info-afip.service';
 import { Factura } from '../factura';
+import { EventEmitter } from 'protractor';
+import { totalmem } from 'os';
 
 @NgModule({
   imports: [CommonModule]
@@ -16,6 +18,7 @@ export class ListaDeFacturasComponent implements OnInit {
   anoActual: number;
   facturasAgrupadas: Factura[][][];
   mesHover: Factura[];
+  anoHover: Factura[][];
   cuitMarcado: CuitMarcado = new CuitMarcado();
 
   constructor(
@@ -37,12 +40,13 @@ export class ListaDeFacturasComponent implements OnInit {
       this.cuitMarcado = new CuitMarcado(cuitTocado,this.facturasAgrupadas);
     }
   }
-  onPointerEnterMes(queMes: Factura[]) {
+  onPointerEnterMes(queMes: Factura[], queAno?: Factura[][]) {
     this.mesHover = queMes;
-    if(this.cuitMarcado.mesesFacturados.includes( this.mesHover))console.log("si´ps");
+    if(queAno) this.anoHover = queAno;
   }
-  onPointerLeaveMes(queMes: Factura[]) {
+  onPointerLeaveMes(queMes: Factura[], queAno?: Factura[][]) {
     if (this.mesHover === queMes) this.mesHover = null;
+    if(this.anoHover == queAno) this.anoHover = null;
   }
 
   mesDeFactura(factura: Factura) {
@@ -84,18 +88,24 @@ class CuitMarcado {
   importeTotal:number;
   importesMensuales: number[];
   mesesFacturados: Factura[][] = [];
+  anosFacturados: Factura[][][] = [];
+  importes: number[][] = [];
   importeMensualMaximo: number;
   visible: boolean = false;
+  ultimoMes = 0;
+  ultimoAno = 0;
 
   constructor(cuitTocado?: number, facturasAgrupadas?: Factura[][][]) {
     if(!cuitTocado || !facturasAgrupadas) return;
     this.visible = true;
     this.cuit = cuitTocado;
     this.importeTotal = 0;
-    this.importeMensualMaximo = 0;
+    this.importeMensualMaximo = 1;
     this.importesMensuales = [];
-    facturasAgrupadas.forEach(ano => {
-      ano.forEach(mes => {
+    facturasAgrupadas.forEach((ano,indiceAno) => {
+      // let entra = false;
+      this.importes.push([]);
+      ano.forEach((mes,indiceMes) => {
         let totalMensual = 0;
         mes.forEach(factura => {
           if (factura.receptorCUIT === this.cuit) {
@@ -104,10 +114,20 @@ class CuitMarcado {
             this.importeTotal += factura.totalFacturadoPesos;
           }
         });
-        if(totalMensual){
+        if(totalMensual) {
+          this.ultimoAno = indiceAno;
+          this.ultimoMes = indiceMes;
+        }
+        // if(totalMensual || entra)
+        {
+          // entra = true;
+
           this.importeMensualMaximo = Math.max(this.importeMensualMaximo, totalMensual);
-          this.importesMensuales.push(totalMensual);
-          this.mesesFacturados.push(mes);
+          // if(this.importeMensualMaximo)
+          // this.importesMensuales.push(totalMensual);
+          // this.mesesFacturados.push(mes);
+          // this.anosFacturados.push(ano);
+          this.importes[indiceAno].push(totalMensual);
         }
       });
     });

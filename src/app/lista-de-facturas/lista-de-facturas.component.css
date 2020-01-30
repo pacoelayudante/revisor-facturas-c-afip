@@ -87,7 +87,7 @@
     border-right: solid var( --separacion-bordecito) transparent;
     background-clip: content-box;
 }
-.mes-container:hover .bordecito {
+.mes-container:hover .bordecito, .mes-container.mes-hover .bordecito {
     border-left-color: var( --col-brillo);
 }
 .lista>span:nth-of-type(odd)+.ano-container .mes-container:nth-child(odd) .bordecito {
@@ -170,19 +170,29 @@ h3 {
 }
 
 .impacto-mensual {
-    pointer-events: all;
+    /* pointer-events: all; */
     width: 8rem;
+    display: flex;
+    flex-direction: column;
 }
 .impacto-mensual>div {
-    height: 3px;
-    margin: 1px;
-    background-color: transparent;
-    background-color: var(--col-destaca);
+    flex-basis: 5px;
+    padding: 0.5px 0px;
+    background-clip: content-box;
+    /* background-color: transparent; */
+    /* background-color: var(--col-destaca); */
+    background-color: var(--col-gris); 
+    display: flex;
+    flex-direction: row;
 }
-/* .ano-container:hover .impacto-mensual>div:not(.mes-hover) {
+.impacto-mensual>div>div{
     background-color: var(--col-destaca);
-} */
-.impacto-mensual>div.mes-hover {
+    /* height: 100%; */
+}
+.ano-container:not(:hover):not(.ano-hover) .impacto-mensual * {
+    background-color: transparent;
+}
+.impacto-mensual>div.mes-hover>div {
     background-color: var(--col-brillo);
 }
 
@@ -229,13 +239,25 @@ h3 {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
-    align-items: flex-end;
 }
 .contenedor-datos-receptor .impacto-mensual>div {
     flex-grow: 1;
     max-width: 1rem;
-    margin: 1px;
+    padding: 0.05rem;
+    flex-direction: column-reverse;
+    background-color: var(--col-fondo);
 }
-/* .contenedor-datos-receptor .impacto-mensual>div:not(.mes-hover) {
+.contenedor-datos-receptor .impacto-mensual>div>div {
     background-color: var(--col-destaca);
-} */
+}
+.contenedor-datos-receptor .impacto-mensual>.mes-hover>div {
+    background-color: var(--col-brillo);
+}
+
+.datos-receptor .oculto {
+    display:none;
+    pointer-events: none;
+}
+.datos-receptor *:not(.oculto)~.oculto {
+    display:flex;
+}
