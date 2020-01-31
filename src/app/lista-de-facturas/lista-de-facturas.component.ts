@@ -32,9 +32,6 @@ export class ListaDeFacturasComponent implements OnInit {
 
   onClickMes(ano:number, mes:number) {
     let apuntado = document.getElementById([ano,mes].join(","));
-    console.log(ano,mes);
-    console.log([ano,mes].join(","));
-    console.log(apuntado);
     if(apuntado) apuntado.scrollIntoView({behavior:"smooth",block:"nearest"});
   }
 
@@ -94,9 +91,6 @@ class CuitMarcado {
   cuit: number;
   nombre: string;
   importeTotal:number;
-  // importesMensuales: number[];
-  // mesesFacturados: Factura[][] = [];
-  // anosFacturados: Factura[][][] = [];
   importes: number[][] = [];
   importeMensualMaximo: number;
   visible: boolean = false;
@@ -109,9 +103,8 @@ class CuitMarcado {
     this.cuit = cuitTocado;
     this.importeTotal = 0;
     this.importeMensualMaximo = 1;
-    // this.importesMensuales = [];
+    
     facturasAgrupadas.forEach((ano,indiceAno) => {
-      // let entra = false;
       this.importes[indiceAno]=[];
       ano.forEach((mes,indiceMes) => {
         let totalMensual = 0;
@@ -126,18 +119,19 @@ class CuitMarcado {
           this.ultimoAno = indiceAno;
           this.ultimoMes = indiceMes;
         }
-        // if(totalMensual || entra)
-        {
-          // entra = true;
 
           this.importeMensualMaximo = Math.max(this.importeMensualMaximo, totalMensual);
-          // if(this.importeMensualMaximo)
-          // this.importesMensuales.push(totalMensual);
-          // this.mesesFacturados.push(mes);
-          // this.anosFacturados.push(ano);
           this.importes[indiceAno].push(totalMensual);
-        }
       });
     });
+  }
+
+  getTotalDeUnMes(mes:Factura[]){
+    if(!this.visible) return 0;
+    let total = 0;
+    mes.forEach(factura=>{
+      if(factura && factura.receptorCUIT == this.cuit) total += factura.totalFacturadoPesos;
+    });
+    return total;
   }
 }

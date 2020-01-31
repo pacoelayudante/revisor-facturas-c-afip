@@ -72,6 +72,10 @@
                     {{cuitMarcado.importeTotal|currency}}
                 </h4>
             </div>
+            <div class="importes-receptor">
+                <h4 class="mensual-maximo">{{cuitMarcado.importeMensualMaximo|currency}}</h4>
+                <h4 *ngIf="mesHover && cuitMarcado.getTotalDeUnMes(mesHover); let totalMes" class="mes-hover">{{totalMes|currency}}</h4>
+            </div>
             <div class="impacto-mensual">
                 <ng-container *ngFor="let cadaAno of cuitMarcado.importes; let anoIndex = index">
                     <ng-container *ngIf="anoIndex<=cuitMarcado.ultimoAno">
