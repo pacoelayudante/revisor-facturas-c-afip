@@ -30,6 +30,14 @@ export class ListaDeFacturasComponent implements OnInit {
     this.anoActual = this.infoService.anoActual;
   }
 
+  onClickMes(ano:number, mes:number) {
+    let apuntado = document.getElementById([ano,mes].join(","));
+    console.log(ano,mes);
+    console.log([ano,mes].join(","));
+    console.log(apuntado);
+    if(apuntado) apuntado.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+
   onReceptorClick(cuitTocado: number, evento: Event) {
     if (evento) evento.stopPropagation();
     if (this.cuitMarcado.visible && this.cuitMarcado.cuit === cuitTocado) this.cuitMarcado.visible = false;
@@ -86,9 +94,9 @@ class CuitMarcado {
   cuit: number;
   nombre: string;
   importeTotal:number;
-  importesMensuales: number[];
-  mesesFacturados: Factura[][] = [];
-  anosFacturados: Factura[][][] = [];
+  // importesMensuales: number[];
+  // mesesFacturados: Factura[][] = [];
+  // anosFacturados: Factura[][][] = [];
   importes: number[][] = [];
   importeMensualMaximo: number;
   visible: boolean = false;
@@ -101,10 +109,10 @@ class CuitMarcado {
     this.cuit = cuitTocado;
     this.importeTotal = 0;
     this.importeMensualMaximo = 1;
-    this.importesMensuales = [];
+    // this.importesMensuales = [];
     facturasAgrupadas.forEach((ano,indiceAno) => {
       // let entra = false;
-      this.importes.push([]);
+      this.importes[indiceAno]=[];
       ano.forEach((mes,indiceMes) => {
         let totalMensual = 0;
         mes.forEach(factura => {

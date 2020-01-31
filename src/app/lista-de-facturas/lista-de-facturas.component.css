@@ -1,5 +1,12 @@
 .animador-lista {
     overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.container-lista {
+    overflow: hidden auto;
+    flex-grow: 1;
 }
 
 .lista {
@@ -197,33 +204,34 @@ h3 {
 }
 
 .contenedor-datos-receptor {
-    position: fixed;
-    left:0px;
-    bottom: 0px;
-    background-color: var(--col-gris);
-    width: 100%;
-    z-index: 1;
-    padding: 10px 0px;
-    max-height: 150px;
+    /* position: fixed; */
+    /* left:0px; */
+    /* bottom: 0px; */
+    background-color: transparent;
+    /* width: 100%; */
+    /* z-index: 1; */
+    max-height: 11rem;
+    /* padding: 10px 0px; */
+    /* max-height: 150px; */
 
     transition: ease-in-out 0.4s;
-    transition-property: left,max-height,bottom;
+    transition-property: left,height,max-height,bottom;
 }
 .contenedor-datos-receptor.oculto {
     max-height: 0px;
-    bottom: -30px;
+    /* bottom: -30px; */
 }
 .contenedor-datos-receptor .borde {
     border-top: double var(--col-gris) 4px;
+    border-bottom: double var(--col-destaca) 4px;
     width: 100%;
     height: 1px;
-    position: absolute;
-    top: -8px;
-    background-color: transparent;
-    border-bottom: double var(--col-destaca) 4px;
-    box-shadow: 0px -4px var(--col-gris);
+    /* position: absolute; */
+    /* top: -8px; */
+    /* box-shadow: 0px -4px var(--col-gris); */
 }
 .datos-receptor {
+    background-color: var(--col-gris);
     padding: 1rem 2rem;
     display: flex;
     flex-direction: row;
