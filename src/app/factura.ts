@@ -54,6 +54,11 @@ export class Factura {
 
     cabeceraDecodificadaIntroduccion = {};
 
+    static extraerIDFactura(data:string, esCabecera:boolean=true):string {
+        let itemsDeCabecera = data.split('\n');
+        return itemsDeCabecera[0].substr(esCabecera? 12 : 11 ,12);
+    }
+
     constructor(idFactura:string) {
         this.idFactura = idFactura;
     }

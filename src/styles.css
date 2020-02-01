@@ -29,13 +29,15 @@ h6, h5, h4, h3 {
     cursor: pointer;
 }
 .boton {
-    top: 0;
+    position: relative;
     width: 10vmin;
     height: 10vmin;
     border: none;
     background-color: transparent;
-
-    position: fixed;
+    
+    transition: linear;
+    transition-property: color;
+    transition-duration: 0.07s;
 }
 .boton::before{
     pointer-events: none;

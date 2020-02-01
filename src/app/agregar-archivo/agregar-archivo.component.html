@@ -1,3 +1,3 @@
-<div class="boton skew-before pointer" [ngClass]="{'inicial': facturas.length===0}" (click)="inputFacturas.click()" mat-mini-fab aria-label="Agregar Datos de Facturas">
+<div class="boton skew-before pointer" [ngClass]="{'inicial': facturas.length===0}" (click)="inputFacturas.click()">
 </div>
 <input class="oculto" type="file" #inputFacturas name="cargarFacturas" (change)="onCargarChanges(inputFacturas)" accept="text/plain" multiple />

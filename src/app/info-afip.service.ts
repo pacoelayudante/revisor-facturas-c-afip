@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as tiposDeComprobantes from './tipos-de-comprobantes.json'
 import { Factura } from './factura';
+import { HttpClient } from '@angular/common/http';
 
 const regexExtraerIdArchivo = /\d{1,11}_\d{1,2}_\d{1,4}_\d{1,8}/g;
 const regexEsDetalle = /DETALLE/g;
@@ -12,11 +13,13 @@ const regexEsCabecera = /CABECERA/g;
 export class InfoAfipService {
   facturasPorId = { "length": 0 };
   facturasArray: Factura[] = [];
-  anoActual : number;
+  anoActual: number;
   facturasAgrupadas: Factura[][][] = [];// por año y por mes
   tiposDeComprobantes: any = (tiposDeComprobantes as any).default;
 
-  constructor() { 
+  constructor(
+    private http: HttpClient
+  ) {
     this.anoActual = new Date().getFullYear();
   }
 
@@ -24,45 +27,48 @@ export class InfoAfipService {
   onLoadArchivo(ev: ProgressEvent, archivo: File) {
     if (ev.loaded) {
       let contenido = <string>(ev.target as FileReader).result;
-      // console.log("archivo cargado : " + archivo.name);
-      let idMatch = archivo.name.match(regexExtraerIdArchivo);
-      if (!idMatch || !idMatch.length) {
-        console.error("nombre de archivo no tiene id");
-        return;
-      }
-      let id = idMatch[0];
+
       let esCabecera = archivo.name.match(regexEsCabecera);
       let esDetalle = archivo.name.match(regexEsDetalle);
+      // console.log("archivo cargado : " + archivo.name);
+      // let idMatch = archivo.name.match(regexExtraerIdArchivo);
 
-      let factura: Factura;
-      if (this.facturasPorId[id]) factura = this.facturasPorId[id];
-      else {
-        factura = new Factura(id);
-        this.facturasPorId[id] = factura;
-        this.facturasPorId["length"]++;
-      }
-      if (esCabecera) factura.actualizarCabecera(contenido);
-      if (esDetalle) factura.actualizarDetalle(contenido);
-
-      if (factura.numeroDeFactura) this.facturasArray[factura.numeroDeFactura] = factura;
-      if (factura.fecha) {
-        let anoInvertido = this.anoActual- factura.fecha.getFullYear();
-        let mesInvertido = 11 - factura.fecha.getMonth();
-        if (! this.facturasAgrupadas[anoInvertido]) {// iniciar array de año, con meses vacios y todo
-          this.facturasAgrupadas[anoInvertido] = [];
-          this.facturasAgrupadas[anoInvertido]["cantMesesPreviosConData"] = 0;
-          for(let m=0; m<12; m++) this.facturasAgrupadas[anoInvertido][m] = [];
-        }
-        if(! this.facturasAgrupadas[anoInvertido][mesInvertido].includes(factura)) {
-          this.facturasAgrupadas[anoInvertido][mesInvertido].push( factura);
-          this.facturasAgrupadas[anoInvertido][mesInvertido].sort((a,b)=>a.fecha.getTime()-b.fecha.getTime());
-        }
-      }
-
-      // for(let i=1; i<this.facturasAgrupadas.length; i++) {//el primero seguro es cero
-      //   this.facturasAgrupadas[i]["cantMesesPreviosConData"] = this.facturasAgrupadas[i-1].filter(e=>e.length).length;
-      // }
+      this.parsearData(contenido, esCabecera ? true : false);
     }
+  }
+
+  parsearData(contenido: string, esCabecera: boolean = true) {
+    let id = Factura.extraerIDFactura(contenido, esCabecera);
+    if (!id || !id.length) {
+      console.error("nombre de archivo no tiene id");
+      return;
+    }
+
+    let factura: Factura;
+    if (this.facturasPorId[id]) factura = this.facturasPorId[id];
+    else {
+      factura = new Factura(id);
+      this.facturasPorId[id] = factura;
+      this.facturasPorId["length"]++;
+    }
+    if (esCabecera) factura.actualizarCabecera(contenido);
+    else factura.actualizarDetalle(contenido);
+
+    if (factura.numeroDeFactura) this.facturasArray[factura.numeroDeFactura] = factura;
+    if (factura.fecha) {
+      let anoInvertido = this.anoActual - factura.fecha.getFullYear();
+      let mesInvertido = 11 - factura.fecha.getMonth();
+      if (!this.facturasAgrupadas[anoInvertido]) {// iniciar array de año, con meses vacios y todo
+        this.facturasAgrupadas[anoInvertido] = [];
+        this.facturasAgrupadas[anoInvertido]["cantMesesPreviosConData"] = 0;
+        for (let m = 0; m < 12; m++) this.facturasAgrupadas[anoInvertido][m] = [];
+      }
+      if (!this.facturasAgrupadas[anoInvertido][mesInvertido].includes(factura)) {
+        this.facturasAgrupadas[anoInvertido][mesInvertido].push(factura);
+        this.facturasAgrupadas[anoInvertido][mesInvertido].sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
+      }
+    }
+
   }
 
   cargarArchivo(archivo: File) {
@@ -77,6 +83,10 @@ export class InfoAfipService {
       };
     })(archivo);
     lector.readAsText(archivo);
+  }
+
+  cargarArchivoDeURL(url: string) {
+    this.http.get(url, { responseType: 'text' }).subscribe(data => this.parsearData(data));
   }
 
 }

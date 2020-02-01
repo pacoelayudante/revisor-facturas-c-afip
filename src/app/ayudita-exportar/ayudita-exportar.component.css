@@ -1,0 +1,28 @@
+.contenedor {
+    position: fixed;
+    margin: 0rem 1.5rem;
+
+}
+
+.oculto {
+    display: none;
+}
+
+a.boton {
+    display: block;
+    text-decoration: none;
+}
+.boton {
+    color: var(--col-fondo);
+    font-weight: bolder;
+    padding: 0.5rem 0.5rem 0rem 1rem;
+    user-select: none;
+    margin: 1rem 0rem;
+}
+.boton:hover:active {
+    color: var(--col-destaca);
+}
+
+.boton::after{
+    display: none;
+}
