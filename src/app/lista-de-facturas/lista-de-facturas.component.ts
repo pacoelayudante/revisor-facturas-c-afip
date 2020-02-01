@@ -35,7 +35,7 @@ export class ListaDeFacturasComponent implements OnInit {
     if(apuntado) apuntado.scrollIntoView({behavior:"smooth",block:"nearest"});
   }
 
-  onReceptorClick(cuitTocado: number, evento: Event) {
+  onReceptorClick(cuitTocado: number, evento?: Event) {
     if (evento) evento.stopPropagation();
     if (this.cuitMarcado.visible && this.cuitMarcado.cuit === cuitTocado) this.cuitMarcado.visible = false;
     else if (! cuitTocado){
